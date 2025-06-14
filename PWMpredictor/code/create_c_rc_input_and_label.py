@@ -1,30 +1,31 @@
 from pathlib import Path
 import numpy as np
 import pandas as pd
-from functions import *          # oneHot_Amino_acid_vec, etc.
+from functions import *            # oneHot_Amino_acid_vec, etc.
 
 # ------------------------------------------------------------------
 #  Load the raw tables
 # ------------------------------------------------------------------
-c_rc_df   = pd.read_csv("../../Data/PWMpredictor/c_rc_df.csv")
+# NOTE the capital D in ../../Data/…
+c_rc_df    = pd.read_csv("../../Data/PWMpredictor/c_rc_df.csv")
 zf_data_df = pd.read_csv("../../Data/PWMpredictor/zf_data_df.csv")
 
-PROT_COL = "UniProt_ID"   # <- actual column names in the CSVs
-IDX_COL  = "ZF_index"
+# column names in each table
+CRC_PROT_COL = "UniProt_ID"
+CRC_IDX_COL  = "ZF_index"
+
+ZF_PROT_COL  = "prot_name_id"
+ZF_IDX_COL   = "zf_index"
 
 # ------------------------------------------------------------------
-#  Build 36-residue neighbour window (prev + curr + next finger)
+#  Build 36-aa neighbour window for the zf_data table
 # ------------------------------------------------------------------
 def add_neighbor_feature(df: pd.DataFrame,
-                         prot_col: str = PROT_COL,
-                         idx_col:  str = IDX_COL,
+                         prot_col: str,
+                         idx_col:  str,
                          pad_char: str = "X",
                          pad_len:  int = 12) -> pd.DataFrame:
-    """
-    Adds a column 'res_36_neighbors' containing:
-        prev_finger   + current_finger + next_finger
-    Fingers that are missing are replaced by 'X'*12 so the length is always 36.
-    """
+    """Create df['res_36_neighbors'] = prev + curr + next finger (36 aa)."""
     df = df.sort_values([prot_col, idx_col]).reset_index(drop=True)
 
     df["_prev_seq"] = df.groupby(prot_col)["res_12"].shift(1)
@@ -42,17 +43,22 @@ def add_neighbor_feature(df: pd.DataFrame,
     df["res_36_neighbors"] = df.apply(_join, axis=1)
     return df.drop(columns=["_prev_seq", "_prev_idx", "_next_seq", "_next_idx"])
 
-zf_data_df = add_neighbor_feature(zf_data_df, PROT_COL, IDX_COL)
-
-# copy neighbour window into c_rc_df (fallback = core 12-mer)
-c_rc_df = c_rc_df.merge(
-    zf_data_df[[PROT_COL, IDX_COL, "res_36_neighbors"]],
-    on=[PROT_COL, IDX_COL], how="left"
-)
-c_rc_df["res_36_neighbors"].fillna(c_rc_df["res_12"], inplace=True)
+zf_data_df = add_neighbor_feature(zf_data_df, ZF_PROT_COL, ZF_IDX_COL)
 
 # ------------------------------------------------------------------
-#  Additional fixed-length windows
+#  Copy the neighbour window into the c_rc table
+# ------------------------------------------------------------------
+c_rc_df = c_rc_df.merge(
+    zf_data_df[[ZF_PROT_COL, ZF_IDX_COL, "res_36_neighbors"]],
+    left_on=[CRC_PROT_COL, CRC_IDX_COL],
+    right_on=[ZF_PROT_COL, ZF_IDX_COL],
+    how="left"
+)
+c_rc_df["res_36_neighbors"].fillna(c_rc_df["res_12"], inplace=True)
+c_rc_df.drop(columns=[ZF_PROT_COL, ZF_IDX_COL], inplace=True)
+
+# ------------------------------------------------------------------
+#  Fixed-length windows (padding or real flanks)
 # ------------------------------------------------------------------
 def pad_with_x(seq: str, flank: int) -> str:
     return f"{'X'*flank}{seq}{'X'*flank}"
@@ -83,7 +89,6 @@ one_hot_c_rc = {
 one_hot_zf = {
     "36neigh": oneHot_Amino_acid_vec(zf_data_df["res_36_neighbors"]),
 }
-
 for length in flank_sizes:
     one_hot_c_rc[str(length)] = oneHot_Amino_acid_vec(c_rc_df[f"res_{length}"])
     one_hot_zf[str(length)]   = oneHot_Amino_acid_vec(zf_data_df[f"res_{length}"])
