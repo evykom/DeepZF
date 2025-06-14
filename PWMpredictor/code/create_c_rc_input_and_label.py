@@ -6,8 +6,8 @@ from functions import *          # oneHot_Amino_acid_vec, etc.
 # ------------------------------------------------------------------
 #  Load the raw tables
 # ------------------------------------------------------------------
-c_rc_df   = pd.read_csv("../../data/PWMpredictor/c_rc_df.csv")
-zf_data_df = pd.read_csv("../../data/PWMpredictor/zf_data_df.csv")
+c_rc_df   = pd.read_csv("../../Data/PWMpredictor/c_rc_df.csv")
+zf_data_df = pd.read_csv("../../Data/PWMpredictor/zf_data_df.csv")
 
 PROT_COL = "UniProt_ID"   # <- actual column names in the CSVs
 IDX_COL  = "ZF_index"
@@ -97,7 +97,7 @@ pwm = c_rc_df[pwm_cols].values
 # ------------------------------------------------------------------
 #  Save outputs
 # ------------------------------------------------------------------
-out_dir = Path("../../data/PWMpredictor/new_data")
+out_dir = Path("../../Data/PWMpredictor/new_data")
 out_dir.mkdir(parents=True, exist_ok=True)
 
 np.save(out_dir / "ground_truth_c_rc.npy", pwm)
