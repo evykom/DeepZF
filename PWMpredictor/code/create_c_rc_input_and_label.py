@@ -104,7 +104,7 @@ pwm = c_rc_df[pwm_cols].values
 # ------------------------------------------------------------------
 #  Save everything
 # ------------------------------------------------------------------
-out_dir = Path("../../data/PWMpredictor/new_data")
+out_dir = Path("../../Data/PWMpredictor/new_data")
 out_dir.mkdir(parents=True, exist_ok=True)
 
 np.save(out_dir / "ground_truth_c_rc.npy", pwm)
