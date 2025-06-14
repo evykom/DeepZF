@@ -98,6 +98,8 @@ def add_neighbor_feature(df: pd.DataFrame,
 
 
 prot_df = add_neighbor_feature(prot_df)
+prot_df["res_36_neighbors"] = prot_df["res_36_neighbors"].str.pad(width=36, fillchar="X") # not sure i need that
+
 prot_12_res = prot_df["res_12"]
 
 # ------------------------------------------------------------------#
