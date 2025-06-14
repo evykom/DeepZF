@@ -53,9 +53,23 @@ def set_trainable_layers(b1h_model, t_v):
     return
 
 
-def pipeline_func_predict(c_rc_df, model_file, output_file):
-    label_mat = (c_rc_df.filter(items=['A1', 'C1', 'G1', 'T1', 'A2', 'C2', 'G2', 'T2', 'A3', 'C3', 'G3', 'T3'])).values
-    data_model = oneHot_Amino_acid_vec(c_rc_df['res_12'])
+def pipeline_func_predict(c_rc_df, model_file, output_file, res_num=12):
+    label_mat = (
+        c_rc_df.filter(items=['A1', 'C1', 'G1', 'T1', 'A2', 'C2', 'G2', 'T2', 'A3', 'C3', 'G3', 'T3'])
+    ).values
+
+    if res_num == 36:
+        seqs = c_rc_df['res_36_neighbors']
+    elif res_num == 12:
+        seqs = c_rc_df['res_12']
+    elif res_num == 7:
+        seqs = c_rc_df['res_7_b1h']
+    elif res_num == 4:
+        seqs = c_rc_df['res_4']
+    else:
+        seqs = c_rc_df[f'res_{res_num}']
+
+    data_model = oneHot_Amino_acid_vec(seqs)
     model = keras.models.load_model(model_file)
     y_predicted = model.predict(data_model).flatten()
     np.savetxt(output_file, y_predicted)
@@ -77,8 +91,22 @@ def pipeline_func(c_rc_df, zf_df, b1h_model, folder_address, lr, epochs, res_num
 #        data_input_model = create_input_model(c_rc_df[c_rc_df['groups'] != i], res_num)
 #        data_test_model = create_input_model(zf_df[zf_df['groups'] == i], res_num)
 
-    label_mat = (c_rc_df.filter(items=['A1', 'C1', 'G1', 'T1', 'A2', 'C2', 'G2', 'T2', 'A3', 'C3', 'G3', 'T3'])).values
-    data_model = oneHot_Amino_acid_vec(c_rc_df['res_12'])
+    label_mat = (
+        c_rc_df.filter(items=['A1', 'C1', 'G1', 'T1', 'A2', 'C2', 'G2', 'T2', 'A3', 'C3', 'G3', 'T3'])
+    ).values
+
+    if res_num == 36:
+        seqs = c_rc_df['res_36_neighbors']
+    elif res_num == 12:
+        seqs = c_rc_df['res_12']
+    elif res_num == 7:
+        seqs = c_rc_df['res_7_b1h']
+    elif res_num == 4:
+        seqs = c_rc_df['res_4']
+    else:
+        seqs = c_rc_df[f'res_{res_num}']
+
+    data_model = oneHot_Amino_acid_vec(seqs)
 
 #        x_train, x_test = data_input_model, data_test_model
 #        y_train, y_test = np.asarray(label_mat), np.asarray(label_test)

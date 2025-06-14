@@ -11,6 +11,6 @@ def pipeline_model(b1h_input_data, b1h_label_mat, c_rc_df, zf_df, folder_address
 
     return
 
-def pipeline_model_predict(c_rc_df, model_file, output_file):
-    pipeline_func_predict(c_rc_df, model_file, output_file)
+def pipeline_model_predict(c_rc_df, model_file, output_file, res_num=12):
+    pipeline_func_predict(c_rc_df, model_file, output_file, res_num)
     return
