@@ -6,8 +6,8 @@ from functions import *        # brings in oneHot_Amino_acid_vec, etc.
 # ------------------------------------------------------------------
 #  Load input tables
 # ------------------------------------------------------------------
-c_rc_df   = pd.read_csv("../../data/PWMpredictor/c_rc_df.csv")
-zf_data_df = pd.read_csv("../../data/PWMpredictor/zf_data_df.csv")
+c_rc_df   = pd.read_csv("../../Data/PWMpredictor/c_rc_df.csv")
+zf_data_df = pd.read_csv("../../Data/PWMpredictor/zf_data_df.csv")
 
 # ------------------------------------------------------------------
 #  36-residue representation built from neighbouring fingers
