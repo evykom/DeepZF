@@ -6,9 +6,13 @@ from functions import *            # oneHot_Amino_acid_vec, etc.
 # ------------------------------------------------------------------
 #  Load the raw tables
 # ------------------------------------------------------------------
-# NOTE the capital D in ../../Data/…
-c_rc_df    = pd.read_csv("../../Data/PWMpredictor/c_rc_df.csv")
-zf_data_df = pd.read_csv("../../Data/PWMpredictor/zf_data_df.csv")
+# white-space (one or more spaces / tabs) is the delimiter
+c_rc_df   = pd.read_csv("../../Data/PWMpredictor/c_rc_df.csv",
+                        sep=r"\s+", engine="python")
+
+zf_data_df = pd.read_csv("../../Data/PWMpredictor/zf_data_df.csv",
+                         sep=r"\s+", engine="python")
+
 
 # column names in each table
 CRC_PROT_COL = "UniProt_ID"
