@@ -10,7 +10,7 @@ INPUT DATA: each amino acid is represented by a 1X20 one hot vector therefore
 
 
 
-B1H_one_finger_add = "UPDATE/one_finger_pwm_gt.txt"
+B1H_one_finger_add = "../../Data/PWMpredictor/one_finger_pwm_gt.txt"
 file = open(B1H_one_finger_add)  # open data file
 
 mat_l = []
