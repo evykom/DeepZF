@@ -1,23 +1,10 @@
 
 from functions import *
-import functions_C_RC as f_c_rc
-import RNN_functions
+import pandas as pd
 
 
-c_rc_df = pd.read_excel('C:/Users/User/Desktop/projects/Amino_DNA/C_RC/C_RC_data.xlsx')
-c_rc_df = f_c_rc.group_zf_by_protein_name(c_rc_df)
-zf_data_df, c_rc_df = RNN_functions.adjust_c_rc_zf_data('C:/Users/User/Desktop/projects/Amino_DNA/zf_connection_pred/', c_rc_df)
-c_rc_df.rename(columns={"12_seq": "res_12"}, inplace=True)
-
-
-c_rc_df['res_7'] = c_rc_df.res_12.map(lambda x: x[2] + x[4:9] + x[-1])
-c_rc_df['res_7_b1h'] = c_rc_df.res_12.map(lambda x: x[5:])
-c_rc_df['res_4'] = c_rc_df.res_12.map(lambda x: x[5] + x[7:9] + x[-1])
-
-zf_data_df['res_12'] = zf_data_df['zf_seq']
-zf_data_df['res_7'] = zf_data_df.res_12.map(lambda x: x[2] + x[4:9] + x[-1])
-zf_data_df['res_7_b1h'] = zf_data_df.res_12.map(lambda x: x[5:])
-zf_data_df['res_4'] = zf_data_df.res_12.map(lambda x: x[5] + x[7:9] + x[-1])
+c_rc_df   = pd.read_csv("../../data/c_rc_df.csv")     
+zf_data_df = pd.read_csv("../../data/zf_data_df.csv") 
 
 # ------------------------------------------------------------------
 #  Additional representations with flanking residues
