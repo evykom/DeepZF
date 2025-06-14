@@ -38,7 +38,24 @@ pwm = pwm[:, reorder_index]
 "each amino acid is a binary 20 length vector"
 string = 'XXXXX'
 prot_7_res_df = pd.DataFrame(prot_7_res_seq_l, columns={'7_res'})
-prot_12_res_df= prot_7_res_df.apply(lambda x: string + x['7_res'], axis=1)
+prot_12_res_df = prot_7_res_df.apply(lambda x: string + x['7_res'], axis=1)
+
+"""Create additional padded representations for longer sequences.
+The original B1H library contains seven informative residues of the
+finger.  For the transfer learning models the sequences were padded
+with five ``X`` characters at the N‑terminus to generate a 12 residue
+representation.  For some experiments we would also like to supply
+additional flanking positions around the canonical twelve residues.
+Since the B1H library does not contain this information we simply pad
+the sequence symmetrically with ``X`` characters."""
+
+# Padding sizes: number of additional residues on each side
+flank_sizes = {16: 2, 24: 6, 36: 12}
+# Create padded sequences for the requested lengths
+padded_seqs = {}
+for length, flank in flank_sizes.items():
+    padded_seqs[length] = prot_12_res_df.apply(
+        lambda s: "X" * flank + s + "X" * flank)
 
 prot_4_res_df = pd.DataFrame(prot_4_res_seq_l)
 
@@ -46,9 +63,16 @@ prot_4_res_df = pd.DataFrame(prot_4_res_seq_l)
 "save model input and label of data including amino acid X"
 "amino acid X is encoded as a 20 length vector with probability 1/20"
 one_hot_12res = oneHot_Amino_acid_vec(prot_12_res_df)
+one_hot_extended = {}
+for length, seqs in padded_seqs.items():
+    one_hot_extended[length] = oneHot_Amino_acid_vec(seqs)
 save_path = '/Transfer_learning/data_labels/'
 np.save(save_path + 'ground_truth_b1h_pwm_12res', pwm)
 np.save(save_path + 'onehot_encoding_b1h_12res', one_hot_12res)
+
+for length, one_hot in one_hot_extended.items():
+    np.save(save_path + f'ground_truth_b1h_pwm_{length}res', pwm)
+    np.save(save_path + f'onehot_encoding_b1h_{length}res', one_hot)
 
 """ one hot encoding for sequences without amino acid X"""
 
@@ -81,3 +105,4 @@ np.save(save_path + 'ground_truth_b1h_pwm_4res', pwm_4res)
 np.save(save_path + 'ground_truth_b1h_pwm_7res', pwm_7res)
 np.save(save_path + 'onehot_encoding_b1h_4res', one_hot_4res)
 np.save(save_path + 'onehot_encoding_b1h_7res', one_hot_7res)
+
