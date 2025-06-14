@@ -39,7 +39,7 @@ for i in range(0, len(lines)-2, 8):
 file.close()
 
 "create pwm matrix (label)"
-mat_pd = pd.DataFrame(mat_l).drop(columns=4)
+mat_pd = pd.DataFrame(mat_l)
 mat_pd = mat_pd.applymap(lambda x: x[4: -1])
 mat_pd['all'] = mat_pd[0] + ' ' + mat_pd[1] + ' ' + mat_pd[2] + ' ' + mat_pd[3]
 mat_pd = mat_pd.applymap(lambda x: np.fromstring(x, dtype=float, sep=' '))
