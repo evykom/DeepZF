@@ -17,6 +17,7 @@ def user_input():
     parser.add_argument('-in', '--input_file', help='input zinc finger file', type=str, required=True)
     parser.add_argument('-out', '--output_file', help='output PWN predictions file', type=str, required=True)
     parser.add_argument('-m', '--model_file', help='trained model file', type=str, required=True)
+    parser.add_argument('-res_num', '--residual_num', help='number of residues to use', type=int, default=12)
 
     args = parser.parse_args()
     arguments = vars(args)
@@ -59,7 +60,7 @@ def main(args):
 #        b1h_one_hot = np.load(main_path + 'onehot_encoding_b1h_4res.npy')
 #        b1h_pwm = np.load(main_path + 'ground_truth_b1h_pwm_4res.npy')
 
-    pipeline_model_predict(c_rc_df, args["model_file"], args["output_file"])
+    pipeline_model_predict(c_rc_df, args["model_file"], args["output_file"], args["residual_num"])
 #(b1h_one_hot, b1h_pwm, c_rc_df, zf_pred_df, args['folder_address'],
 #                   args['learning_rate'], args['epochs'], args['transfer_version'],
 #                   args['residual_num'])

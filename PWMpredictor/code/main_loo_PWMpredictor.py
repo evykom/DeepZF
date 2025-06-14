@@ -40,12 +40,15 @@ def main(args):
     c_rc_df = pd.read_csv(main_path + 'c_rc_df.csv', sep=' ')
     zf_pred_df = pd.read_csv(main_path + args['pred_zf_df'], sep=' ')
 
-    if args["residual_num"] == 12:
+    if args["residual_num"] == 36:
+        b1h_one_hot = np.load(main_path + 'onehot_encoding_b1h_36neigh.npy')
+        b1h_pwm = np.load(main_path + 'ground_truth_b1h_pwm_36neigh.npy')
+    elif args["residual_num"] == 12:
         b1h_one_hot = np.load(main_path + 'onehot_encoding_b1h_12res.npy')
         b1h_pwm = np.load(main_path + 'ground_truth_b1h_pwm_12res.npy')
 
 
-    if args["residual_num"] == 7:
+    elif args["residual_num"] == 7:
         if not args['amino_acid_x']:
             b1h_one_hot = np.load(main_path + 'onehot_encoding_b1h_7res.npy')
             b1h_pwm = np.load(main_path + 'ground_truth_b1h_pwm_7res.npy')
@@ -53,7 +56,7 @@ def main(args):
             b1h_one_hot = np.load(main_path + 'onehot_encoding_7b1h_res_with_ac_x.npy')
             b1h_pwm = np.load(main_path + 'ground_truth_b1h_pwm_with_ac_x.npy')
 
-    if args["residual_num"] == 4:  # residual number is equal to 4
+    elif args["residual_num"] == 4:  # residual number is equal to 4
         b1h_one_hot = np.load(main_path + 'onehot_encoding_b1h_4res.npy')
         b1h_pwm = np.load(main_path + 'ground_truth_b1h_pwm_4res.npy')
 
