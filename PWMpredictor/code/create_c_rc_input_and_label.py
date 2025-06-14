@@ -90,7 +90,9 @@ one_hot_zf_neighbors = oneHot_Amino_acid_vec(zf_data_df['res_36_neighbors'])
 "labels: the pwm is the same to all sequence residuals"
 pwm = (c_rc_df.filter(items=['A1', 'C1', 'G1', 'T1', 'A2', 'C2', 'G2', 'T2', 'A3', 'C3', 'G3', 'T3'])).values
 "Savings"
-path = '../../data/PWMpredictor/new_data'
+path = Path('../../data/PWMpredictor/new_data')
+path.mkdir(exist_ok=True, parents=True)
+np.save(path / 'ground_truth_c_rc.npy', pwm)
 np.save(path + 'ground_truth_c_rc', pwm)
 np.save(path + 'onehot_encoding_c_rc_4res', one_hot_c_rc_4res)
 np.save(path + 'onehot_encoding_c_rc_7res', one_hot_c_rc_7res)
