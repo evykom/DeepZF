@@ -43,6 +43,12 @@ def main(args):
     if args["residual_num"] == 36:
         b1h_one_hot = np.load(main_path + 'onehot_encoding_b1h_36neigh.npy')
         b1h_pwm = np.load(main_path + 'ground_truth_b1h_pwm_36neigh.npy')
+    elif args["residual_num"] == 26:
+        b1h_one_hot = np.load(main_path + 'onehot_encoding_b1h_26neigh.npy')
+        b1h_pwm = np.load(main_path + 'ground_truth_b1h_pwm_26neigh.npy')
+    elif args["residual_num"] == 20:
+        b1h_one_hot = np.load(main_path + 'onehot_encoding_b1h_20neigh.npy')
+        b1h_pwm = np.load(main_path + 'ground_truth_b1h_pwm_20neigh.npy')    
     elif args["residual_num"] == 12:
         b1h_one_hot = np.load(main_path + 'onehot_encoding_b1h_12res.npy')
         b1h_pwm = np.load(main_path + 'ground_truth_b1h_pwm_12res.npy')
