@@ -85,12 +85,6 @@ def extract_with_flank(row, flank: int) -> str:
     right = min(end + flank, len(row["prot_seq"]))
     return row["prot_seq"][left:right]
 
-flank_sizes = {16: 2, 24: 6, 36: 12}
-
-for length, flank in flank_sizes.items():
-    c_rc_df[f"res_{length}"] = c_rc_df["res_12"].apply(pad_with_x, flank=flank)
-    zf_data_df[f"res_{length}"] = zf_data_df.apply(extract_with_flank,
-                                                   flank=flank, axis=1)
 
 # ------------------------------------------------------------------
 #  One-hot encodings
@@ -105,9 +99,6 @@ one_hot_c_rc = {
 one_hot_zf = {
     "36neigh": oneHot_Amino_acid_vec(zf_data_df["res_36_neighbors"]),
 }
-for length in flank_sizes:
-    one_hot_c_rc[str(length)] = oneHot_Amino_acid_vec(c_rc_df[f"res_{length}"])
-    one_hot_zf[str(length)]   = oneHot_Amino_acid_vec(zf_data_df[f"res_{length}"])
 
 # ------------------------------------------------------------------
 #  PWM labels
