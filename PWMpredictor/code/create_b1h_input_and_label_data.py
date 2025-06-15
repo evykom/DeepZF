@@ -2,10 +2,7 @@
 create_b1h_input_and_label_data.py
 
 Builds B1H one-finger inputs (one-hot amino-acid vectors) and PWM labels
-for transfer-learning ZF models.  Two sets are produced:
-
-1. **X-padded** versions (all sequences kept, X encoded as uniform 1/20).
-2. **X-free** versions   (rows that contain “X” in the residue string removed).
+for transfer-learning ZF models. 
 
 Outputs are written under ../../Data/PWMpredictor/new_data/
 """
@@ -16,7 +13,6 @@ Outputs are written under ../../Data/PWMpredictor/new_data/
 from pathlib import Path
 import numpy as np
 import pandas as pd
-
 from functions import *           # oneHot_Amino_acid_vec, etc.
 
 # ------------------------------------------------------------------#
@@ -102,33 +98,6 @@ prot_df["res_36_neighbors"] = prot_df["res_36_neighbors"].str.pad(width=36, fill
 
 prot_12_res = prot_df["res_12"]
 
-# ------------------------------------------------------------------#
-#  Padded longer windows (X only – B1H has no flanking residues)
-# ------------------------------------------------------------------#
-flank_sizes = {16: 2, 24: 6, 36: 12}
-padded_seqs = {
-    length: prot_12_res.apply(lambda s, f=flank: "X"*f + s + "X"*f)
-    for length, flank in flank_sizes.items()
-}
-
-# ------------------------------------------------------------------#
-#  Save set **with** X (all sequences kept)
-# ------------------------------------------------------------------#
-out_dir = Path("../../Data/PWMpredictor/new_data")
-out_dir.mkdir(parents=True, exist_ok=True)
-
-np.save(out_dir / "ground_truth_b1h_pwm_12res.npy", pwm)
-np.save(out_dir / "onehot_encoding_b1h_12res.npy",
-        oneHot_Amino_acid_vec(prot_12_res))
-
-for length, seqs in padded_seqs.items():
-    np.save(out_dir / f"ground_truth_b1h_pwm_{length}res.npy", pwm)
-    np.save(out_dir / f"onehot_encoding_b1h_{length}res.npy",
-            oneHot_Amino_acid_vec(seqs))
-
-np.save(out_dir / "ground_truth_b1h_pwm_36neigh.npy", pwm)
-np.save(out_dir / "onehot_encoding_b1h_36neigh.npy",
-        oneHot_Amino_acid_vec(prot_df["res_36_neighbors"]))
 
 # ------------------------------------------------------------------#
 #  Build **X-free** subsets
