@@ -83,8 +83,8 @@ python3.6 create_zf_pred_df_and_cal_auc.py -p_add path/to/predicted ZF -m_p path
 	
 ## Usage
 
-### Preparing 36-residue data
-To train or predict with 36-aa neighbour windows, create the dataset under
+### Preparing neighbour-window data
+To train or predict with 20-, 26- or 36-aa neighbour windows, create the dataset under
 `Data/PWMpredictor/new_data/` using:
 ```bash
 python3.6 create_b1h_input_and_label_data.py
@@ -94,11 +94,11 @@ python3.6 create_c_rc_input_and_label.py
 
 Run under PWMpredictor/code dir:
 ```
-python3.6 main_PWMpredictor.py -in <input_file> -out <output_file> -m <model_file> [-res_num 12]
+python3.6 main_PWMpredictor.py -in <input_file> -out <output_file> -m <model_file> [-res_num {12|20|26|36}]
 ```
 Example:
 ```
-python3.6 main_PWMpredictor.py -in ../../Data/PWMpredictor/new_data/c_rc_df.csv -out predictions.txt -m ../models/transfer_model.h5 -res_num 36
+python3.6 main_PWMpredictor.py -in ../../Data/PWMpredictor/new_data/c_rc_df.csv -out predictions.txt -m ../models/transfer_model.h5 -res_num 26
 ```
 
 ### Training PWMpredictor
@@ -116,7 +116,7 @@ python3.6 main_PWMpredictor.py -in ../../Data/PWMpredictor/new_data/c_rc_df.csv 
   ```
 2. Run model:
 ```
-	python3.6 main_loo_PWMpredictor.py -d_add /path_to_data/ -add ${f} -zf_p_df c_rc_df.csv -lr $lr -e $i -res_num 36 -r 0 -t_v retrain -ac_x False >> ${f}_out
+	python3.6 main_loo_PWMpredictor.py -d_add /path_to_data/ -add ${f} -zf_p_df c_rc_df.csv -lr $lr -e $i -res_num 26 -r 0 -t_v retrain -ac_x False >> ${f}_out
 ```
 ### Flags
 ```
@@ -125,7 +125,7 @@ python3.6 main_PWMpredictor.py -in ../../Data/PWMpredictor/new_data/c_rc_df.csv 
 '-zf_p_df', '--pred_zf_df', help='predicted binding zinc fingers df', type=str, required=True
 '-lr', '--learning_rate', help='learning rate of adam optimizer', type=float, required=True
 '-e', '--epochs', help='number of epochs', type=int, required=True
-'-res_num', '--residual_num', help='number of residuals to use: 4, 7, 12, 36', type=int, required=True
+'-res_num', '--residual_num', help='number of residuals to use: 4, 7, 12, 20, 26, 36', type=int, required=True
 '-r', '--run_gpu', help='equal 1 if should run on gpu', type=int, required=True
 '-t_v', '--transfer_version', help='last_layer or retrain', type=str, required=True
 '-ac_x', '--amino_acid_x', help='use b1h data with amino acid x', type=str, required=True
