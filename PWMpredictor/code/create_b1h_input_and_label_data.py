@@ -123,6 +123,9 @@ one_hot_7 = oneHot_Amino_acid_vec(prot_7_df.iloc[:, 0])
 pwm_4 = np.delete(pwm, x_idx_4, axis=0)
 pwm_7 = np.delete(pwm, x_idx_7, axis=0)
 
+out_dir = Path("../../Data/PWMpredictor/new_data")
+out_dir.mkdir(parents=True, exist_ok=True)
+
 np.save(out_dir / "ground_truth_b1h_pwm_4res.npy", pwm_4)
 np.save(out_dir / "ground_truth_b1h_pwm_7res.npy", pwm_7)
 np.save(out_dir / "onehot_encoding_b1h_4res.npy", one_hot_4)
