@@ -73,18 +73,6 @@ c_rc_df["res_36_neighbors"].fillna(
 
 c_rc_df.drop(columns=[ZF_PROT_COL, ZF_IDX_COL], inplace=True)
 
-# ------------------------------------------------------------------
-#  Fixed-length windows (X-padding vs real flanks)
-# ------------------------------------------------------------------
-def pad_with_x(seq: str, flank: int) -> str:
-    return f"{'X'*flank}{seq}{'X'*flank}"
-
-def extract_with_flank(row, flank: int) -> str:
-    start, end = int(row["zf_indx_start"]), int(row["zf_indx_end"])
-    left  = max(start - flank, 0)
-    right = min(end + flank, len(row["prot_seq"]))
-    return row["prot_seq"][left:right]
-
 
 # ------------------------------------------------------------------
 #  One-hot encodings
