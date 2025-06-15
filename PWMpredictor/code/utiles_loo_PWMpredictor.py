@@ -9,6 +9,10 @@ def get_label_mat(c_rc_df):
 def create_input_model(df, res_num):
     if res_num == 36:
         oneHot_C_RC_amino = oneHot_Amino_acid_vec(df['res_36_neighbors'])
+    elif res_num == 26:
+        oneHot_C_RC_amino = oneHot_Amino_acid_vec(df['res_26_neighbors'])
+    elif res_num == 20:
+        oneHot_C_RC_amino = oneHot_Amino_acid_vec(df['res_20_neighbors'])
     elif res_num == 12:
         oneHot_C_RC_amino = oneHot_Amino_acid_vec(df['res_12'])
     elif res_num == 7:
