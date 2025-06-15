@@ -60,6 +60,10 @@ def pipeline_func_predict(c_rc_df, model_file, output_file, res_num=12):
 
     if res_num == 36:
         seqs = c_rc_df['res_36_neighbors']
+    elif res_num == 26:
+        seqs = c_rc_df['res_26_neighbors']
+    elif res_num == 20:
+        seqs = c_rc_df['res_20_neighbors']
     elif res_num == 12:
         seqs = c_rc_df['res_12']
     elif res_num == 7:
@@ -97,6 +101,10 @@ def pipeline_func(c_rc_df, zf_df, b1h_model, folder_address, lr, epochs, res_num
 
     if res_num == 36:
         seqs = c_rc_df['res_36_neighbors']
+    elif res_num == 26:
+        seqs = c_rc_df['res_26_neighbors']
+    elif res_num == 20:
+        seqs = c_rc_df['res_20_neighbors']
     elif res_num == 12:
         seqs = c_rc_df['res_12']
     elif res_num == 7:
